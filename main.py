@@ -1,13 +1,27 @@
-from simple_net import SimpleNet
 from torch.utils.data import DataLoader
-import torch.nn.functional as F
 import torch
 from torchvision import datasets
 from torchvision.transforms import ToTensor
 import matplotlib.pyplot as plt
+import torch.nn as nn
+import torch.nn.functional as F
+
+class SimpleNet(nn.Module):
+    def __init__(self):
+        super(SimpleNet, self).__init__()
+        self.net = nn.Sequential(
+            nn.Conv2d(1,20, (28,28)),
+            nn.Flatten(),
+            nn.Linear(20, 10)
+
+        )
+
+    def forward(self, x):
+        x = self.net(x)
+        return F.log_softmax(x, dim=1)
 
 def train():
-    NUM_EPOCHS = 5000
+    NUM_EPOCHS = 1000
     BATCH_SIZE = 1
 
     working_set = datasets.MNIST(
@@ -34,8 +48,19 @@ def train():
         loss.backward()
         optimizer.step()
         print(f'Epoch:{epoch + 1}, Loss:{loss.item():.4f}')
-    torch.save(model.state_dict(), 'models/cnn.h5')
+    return model
 
-train()
+def visTensor(tensor):
+    tensor = tensor.reshape(tensor.shape[0],tensor.shape[2],tensor.shape[3])
+    for i in tensor:
+        m = torch.mean(i)
+        i[i < m] = 0
+        i[i >= m] = 1
+        plt.imshow(i.numpy())
+        plt.show()
+
+model = train()
+filter = model.net[0].weight.data.clone()
+visTensor(filter)
 
 

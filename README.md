@@ -1,3 +1,10 @@
-Run train.py to train the machine
+**Install**
 
-And then, run test.py to test using the trained parameters.
+```shell
+pip install -r requirements.txt
+```
+
+**Run**
+
+Run main.py
+
