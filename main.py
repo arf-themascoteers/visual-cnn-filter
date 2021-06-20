@@ -10,9 +10,9 @@ class SimpleNet(nn.Module):
     def __init__(self):
         super(SimpleNet, self).__init__()
         self.net = nn.Sequential(
-            nn.Conv2d(1,20, (28,28)),
+            nn.Conv2d(1,10, (28,28)),
             nn.Flatten(),
-            nn.Linear(20, 10)
+            nn.Linear(10, 10)
 
         )
 
