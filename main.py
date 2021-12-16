@@ -9,9 +9,9 @@ class SimpleNet(nn.Module):
     def __init__(self):
         super(SimpleNet, self).__init__()
         self.net = nn.Sequential(
-            nn.Conv2d(1,5, (28,28)),
+            nn.Conv2d(1,3, (28,28)),
             nn.Flatten(),
-            nn.Linear(5, 10)
+            nn.Linear(3, 10)
         )
 
     def forward(self, x):
@@ -24,7 +24,7 @@ def plot_tensor(tensor):
     tensor = tensor.data.clone()
     tensor[tensor >= mean] = 255
     tensor[tensor < mean] = 0
-    plt.imshow(tensor.numpy())
+    plt.imshow(tensor.numpy(), cmap="hot")
     plt.show()
 
 
@@ -36,7 +36,7 @@ def plot_filters(filters):
 
 
 def train(model, data):
-    NUM_EPOCHS = 5000
+    NUM_EPOCHS = 1000
     model.train()
     optimizer = torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
 
@@ -58,9 +58,7 @@ data = data.reshape(1,1,data.shape[0],data.shape[1])
 model = SimpleNet()
 filters = model.net[0].weight.data
 plot_filters(filters)
-
 train(model, data)
-
 filters = model.net[0].weight.data
 plot_filters(filters)
 
